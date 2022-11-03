@@ -1,0 +1,10 @@
+set previewer ~/.config/lf/preview
+set cleaner ~/.config/lf/cleaner
+
+# Basic Settings
+set hidden true
+set icons true
+
+# Basic Functions
+map . set hidden!
+map DD delete
