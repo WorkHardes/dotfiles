@@ -24,10 +24,6 @@
 
 ![image](./static/lf.png)
 
-### VS Code
-
-![image](./static/vs-code.png)
-
 ### k9s
 
 ![image](./static/k9s.png)
