@@ -24,6 +24,10 @@
 
 ![image](./static/lf.png)
 
+### tmux
+
+![image](./static/tmux.png)
+
 ### k9s
 
 ![image](./static/k9s.png)
