@@ -9,6 +9,7 @@
 - [lf](https://github.com/gokcehan/lf)
 - [k9s](https://k9scli.io/)
 - [tmux](https://github.com/tmux/tmux)
+- [nvim](https://neovim.io/)
 
 ## Appearance
 
