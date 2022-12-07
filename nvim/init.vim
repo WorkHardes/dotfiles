@@ -14,25 +14,16 @@ set shiftwidth=4
 set smartindent
 set softtabstop=4
 set noswapfile
-set tabstop=4
+set tabstop=8
 
-au BufNewFile,BufRead *.py
-    \ set tabstop=4
+" for python files
+au BufNewFile, BufRead *.py
+    \ set tabstop=8
     \ set softtabstop=4
     \ set shiftwidth=4
     \ set expandtab
     \ set autoindent
     \ set fileformat=unix
-
-au BufNewFile,BufRead *.py \
-  set foldmethod=indent
-
-au BufNewFile,BufRead *.js, *.html, *.css
-    \ set tabstop=2
-    \ set softtabstop=2
-    \ set shiftwidth=2
-
-au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 
 let mapleader = ","
 
@@ -51,15 +42,20 @@ Plug 'majutsushi/tagbar'
 
 " ================Python================
 Plug 'davidhalter/jedi-vim'
+Plug 'Vimjas/vim-python-pep8-indent'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'pappasam/coc-jedi', { 'do': 'yarn install --frozen-lockfile && yarn build', 'branch': 'main' }
 
 " ================Other================
 Plug 'dense-analysis/ale'
 Plug 'jiangmiao/auto-pairs'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'numirias/semshi'
-Plug 'preservim/nerdcommenter'
+Plug 'tpope/vim-commentary'
 Plug 'junegunn/fzf.vim'
+Plug 'editorconfig/editorconfig-vim'
+Plug 'nvim-tree/nvim-web-devicons'
+Plug 'romgrk/barbar.nvim'
 
 call plug#end()
 
@@ -76,22 +72,12 @@ nnoremap <C-f> :NERDTreeFind<CR>
 " for tagbar
 nmap <F8> :TagbarToggle<CR>
 
-" enable folding with the spacebar
-" nnoremap <space> za
-
-let python_highlight_all=1
-syntax on
-
-let g:ale_linters = {
-      \   'python': ['bandit', 'mypy' ,'flake8', 'pylint', 'ruff'],
-      \   'javascript': ['eslint'],
-      \}
-
-let g:ale_fixers = {
-      \    'python': ['ruff'],
-      \}
-nmap <F10> :ALEFix<CR>
+" for ale
+let g:ale_linters = {'python': 'all'}
+let g:ale_fixers = {'python': ['bandit', 'mypy', 'isort' ,'flake8', 'pylint', 'ruff', 'remove_trailing_lines', 'trim_whitespace']}
+let g:ale_lsp_suggestions = 1
 let g:ale_fix_on_save = 1
+let g:ale_completion_enabled = 0
 
 " shows the total number of warnings and errors in the status line
 function! LinterStatus() abort
@@ -112,3 +98,4 @@ set statusline+=%m
 set statusline+=\ %f
 set statusline+=%=
 set statusline+=\ %{LinterStatus()}
+
