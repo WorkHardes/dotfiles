@@ -34,13 +34,16 @@ call plug#begin('~/.vim/plugged')
 " ================Appearance================
 Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
 Plug 'xiyaowong/nvim-transparent'
-Plug 'neovim/nvim-lspconfig'
 
 " ================Navigation================
-Plug 'scrooloose/nerdtree'
+Plug 'preservim/nerdtree'
+Plug 'ryanoasis/vim-devicons'
 Plug 'majutsushi/tagbar'
+Plug 'romgrk/barbar.nvim'
+Plug 'nvim-tree/nvim-web-devicons'
 
 " ================Python================
+Plug 'neovim/nvim-lspconfig'
 Plug 'davidhalter/jedi-vim'
 Plug 'Vimjas/vim-python-pep8-indent'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -54,27 +57,25 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'tpope/vim-commentary'
 Plug 'junegunn/fzf.vim'
 Plug 'editorconfig/editorconfig-vim'
-Plug 'nvim-tree/nvim-web-devicons'
-Plug 'romgrk/barbar.nvim'
 
 call plug#end()
 
 " appearance
 colorscheme tokyonight-storm
-let g:airline_theme='base16'
+let g:airline_theme = 'tokyonight'
 
-" for nerdtree
+" nerdtree
 nnoremap <leader>n :NERDTreeFocus<CR>
 nnoremap <C-n> :NERDTree<CR>
 nnoremap <C-t> :NERDTreeToggle<CR>
 nnoremap <C-f> :NERDTreeFind<CR>
 
-" for tagbar
+" tagbar
 nmap <F8> :TagbarToggle<CR>
 
 " for ale
 let g:ale_linters = {'python': 'all'}
-let g:ale_fixers = {'python': ['bandit', 'mypy', 'isort' ,'flake8', 'pylint', 'ruff', 'remove_trailing_lines', 'trim_whitespace']}
+let g:ale_fixers = {'python': ['autoflake', 'black', 'isort', 'ruff', 'remove_trailing_lines', 'trim_whitespace']}
 let g:ale_lsp_suggestions = 1
 let g:ale_fix_on_save = 1
 let g:ale_completion_enabled = 0
@@ -98,4 +99,3 @@ set statusline+=%m
 set statusline+=\ %f
 set statusline+=%=
 set statusline+=\ %{LinterStatus()}
-
