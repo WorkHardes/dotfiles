@@ -4,12 +4,12 @@
 
 - [alacritty](https://alacritty.org/)
 - [kitty](https://sw.kovidgoyal.net/kitty/)
+- [nvim](https://neovim.io/)
 - [oh-my-zsh](https://ohmyz.sh/)
 - [fish shell](https://fishshell.com/)
 - [lf](https://github.com/gokcehan/lf)
 - [k9s](https://k9scli.io/)
 - [tmux](https://github.com/tmux/tmux)
-- [nvim](https://neovim.io/)
 
 ## Appearance
 
@@ -20,6 +20,10 @@
 ### Kitty
 
 ![image](./static/kitty.png)
+
+### Neovim
+
+![image](./static/nvim.png)
 
 ### lf
 
