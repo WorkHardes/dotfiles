@@ -3,13 +3,16 @@
 ## Contains configs for
 
 - [alacritty](https://alacritty.org/)
+- [fish shell](https://fishshell.com/)
+- [k9s](https://k9scli.io/)
 - [kitty](https://sw.kovidgoyal.net/kitty/)
+- [lf](https://github.com/gokcehan/lf)
 - [nvim](https://neovim.io/)
 - [oh-my-zsh](https://ohmyz.sh/)
-- [fish shell](https://fishshell.com/)
-- [lf](https://github.com/gokcehan/lf)
-- [k9s](https://k9scli.io/)
+- [sway](https://github.com/swaywm/sway)
 - [tmux](https://github.com/tmux/tmux)
+- [waybar](https://github.com/Alexays/Waybar)
+- [wofi](https://hg.sr.ht/~scoopta/wofi)
 
 ## Appearance
 
@@ -17,22 +20,30 @@
 
 ![image](./static/alacritty.png)
 
+### k9s
+
+![image](./static/k9s.png)
+
 ### Kitty
 
 ![image](./static/kitty.png)
-
-### Neovim
-
-![image](./static/nvim.png)
 
 ### lf
 
 ![image](./static/lf.png)
 
+### Neovim
+
+![image](./static/nvim.png)
+
 ### tmux
 
 ![image](./static/tmux.png)
 
-### k9s
+### sway and waybar
 
-![image](./static/k9s.png)
+![image](./static/sway.jpg)
+
+### wofi
+
+![image](./static/wofi.jpg)
