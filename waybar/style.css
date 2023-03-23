@@ -1,9 +1,10 @@
 * {
     font-family: Roboto, Helvetica, Arial, sans-serif, otf-font-awesome;
     font-size: 14px;
-    min-height: 0;
+    min-height: 10px;
     border-radius: 0;
-    padding: 0 5px 0 2px;
+    border: none;
+    padding: 0 2px 0 2px;
 }
 
 window#waybar {
@@ -13,7 +14,7 @@ window#waybar {
 }
 
 #workspaces button {
-    padding: 0 2px 0 6px;
+    padding: 0 6px 0 6px;
     margin: 0 10px;
     border-right: 0px solid #2f343f;
     border-left: 0px solid #2f343f;
@@ -45,13 +46,15 @@ window#waybar {
 }
 
 #pulseaudio,
+#backlight,
 #language,
 #battery,
 #clock
 {
     background: #a9c3e2;
     color: #2f343f;
-    padding: 2 14px;
-    margin: 3 4px;
-    border-radius: 5;
+    padding: 4 14px;
+    margin: 2 2px;
+    border-radius: 6;
 }
+
