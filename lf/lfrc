@@ -1,10 +1,13 @@
 set previewer ~/.config/lf/preview
-set cleaner ~/.config/lf/cleaner
-
-# Basic Settings
 set hidden true
 set icons true
+set scrolloff 4
+set tabstop 2
+set shellopts '-eu'
+set info size
 
-# Basic Functions
+# Custom Functions
 map . set hidden!
 map DD delete
+map ad push $mkdir<space>
+map af push $touch<space>

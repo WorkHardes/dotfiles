@@ -1,183 +1,189 @@
-#!/bin/sh
-# lf's file previewer script.
+#! /usr/bin/env bash
 
-# cache dir
-dir="${XDG_CACHE_HOME:-$HOME/.cache}/lf/preview"
+set -eu
 
-# args
-f="$1" # file to preview
-w="$2" # width of preview window
-h="$3" # height of preview window
-x="$4" # x position of preview window
-y="$5" # y position of preview window
+[ -z "${1:-}" ] && echo "usage: $0 <image> [width] [height]" && exit 1
 
-main()
-{
-    [ -z "$1" ] && echo lf previewer script. && exit 1
-    
-    mkdir -pm700 "$dir" || exit 1
-    
-    twoext="$(printf '%s\n' "$f" | tr '[:upper:]' '[:lower:]' | rev | cut -d. -f1-2 | rev)"
-    ext="$(printf '%s\n' "$f" | tr '[:upper:]' '[:lower:]' | rev | cut -d. -f1 | rev)"
-    
-    case "$twoext" in
-        tar.gz|tar.xz|tar.bz|tar.bz2|tar.z|tar.lzo|tar.lz|tar.7z|tar.zst)
-            run atool -l "$f"; return
-        ;;
-    esac
-    
-    case "$ext" in
-        [1-8])
-            if head "$f" | grep -q '^\.TH'; then
-                man "$f"
-                return
-            fi
-        ;;
-    esac
-    
-    case "$ext" in
-        
-        tar|tgz|tbz|tbz2|tz|tzo|tlz|txz|t7z|tzst|zip|jar|war|rar|lha|lzh|7z|\
-        ace|a|arj|arc|rpm|deb|cab|zst|cpio)
-            run atool -l "$f"
-        ;;
-        
-        gz) list_archive gzip "$f" ;;
-        xz) list_archive xz "$f" ;;
-        o) run -p binutils nm "$f" | less ;;
-        iso) run -p libcdio iso-info --no-header -l "$f" ;;
-        doc) run catdoc "$f" ;;
-        docx) run docx2txt "$f" - ;;
-        torrent) run -p transmission-cli transmission-show "$f" ;;
-        odt|ods|odp|sxw) run odt2txt "$f" ;;
-        
-        wav|mp3|flac|m4a|wma|ape|ac3|og[agx]|spx|opus|as[fx])
-            run mediainfo "$f"
-        ;;
-        
-        bmp|gif|jpg|jpeg|jfif|jpe|png|xpm|webp|dng|tif)
-            image "$f"
-        ;;
-        
-        pdf)
-            thumbnail="$dir/$(uid "$f")"
-            if [ ! -f "$thumbnail.jpg" ]; then
-                run -p poppler pdftoppm -jpeg -jpegopt quality=50,optimize=y -f 1 -singlefile "$f" "$thumbnail" ||
-                printf "[lfpreviewer]\nfailed generating a preview for this pdf file.\n"
-            fi
-            [ -f "$thumbnail.jpg" ] && image "$thumbnail.jpg"
-        ;;
-        
-        svg)
-            thumbnail="$dir/$(uid "$f")"
-            if [ ! -f "$thumbnail.jpg" ]; then
-                run -p imagemagick convert "$f" "$thumbnail.jpg" ||
-                printf "[lfpreviewer]\nfailed generating a preview for this svg file.\n"
-            fi
-            [ -f "$thumbnail.jpg" ] && image "$thumbnail.jpg"
-        ;;
-        
-        psd|xcf)
-            if [ "$(du -b "$f" | cut -f1)" -gt 50000000 ]; then
-                printf "[lfpreviewer]\nfile is too big to preview.\n"
-                return
-            fi
-            thumbnail="$dir/$(uid "$f")"
-            if [ ! -f "$thumbnail.jpg" ]; then
-                pkill -xf '.*convert.*-flatten -resize.*'
-                run -p imagemagick -c convert timeout -k 5s 60s convert "$f" -flatten -resize 1500x "$thumbnail.jpg"
-                case $? in
-                    0) ;;
-                    124) printf "[lfpreviewer]\ngenerating this preview takes too long.\n" ;;
-                    *) printf "[lfpreviewer]\nfailed generating a preview for this file.\n"; exit 1 ;;
-                esac
-            fi
-            [ -f "$thumbnail.jpg" ] && image "$thumbnail.jpg"
-        ;;
-        
-        epub)
-            thumbnail="$dir/$(uid "$f")"
-            if [ ! -f "$thumbnail.png" ]; then
-                run gnome-epub-thumbnailer --size 1024 "$f" "$thumbnail.png" ||
-                printf "[lfpreviewer]\ncouldn't find a cover for this epub.\n"
-            fi
-            [ -f "$thumbnail.png" ] && image "$thumbnail.png"
-        ;;
-        
-        prc|mobi|azw|azw3|kf8|kfx)
-            thumbnail="$dir/$(uid "$f")"
-            if [ ! -f "$thumbnail.png" ]; then
-                run gnome-mobi-thumbnailer --size 1024 "$f" "$thumbnail.png" ||
-                printf "[lfpreviewer]\ncouldn't find a cover for this ebook.\n"
-            fi
-            [ -f "$thumbnail.png" ] && image "$thumbnail.png"
-        ;;
-        
-        avi|mp4|wmv|dat|3gp|ogv|mkv|mpg|mpeg|vob|fl[icv]|\
-        m2v|mov|webm|ts|mts|m4v|r[am]|qt|divx)
-            thumbnail="$dir/$(uid "$f")"
-            if [ ! -f "$thumbnail.jpg" ]; then
-                ffmpegthumbnailer -m -s0 -q5 -i "$f" -o "$thumbnail.jpg" ||
-                printf "[lfpreviewer]\ncouldn't generate a thumbnail for this video file."
-            fi
-            [ -f "$thumbnail.jpg" ] && image "$thumbnail.jpg"
-        ;;
-        
-        *)  LC_MESSAGES=c grep -m1 '^' "$f" 2>&1 |
-            grep -qi 'grep.*binary file matches' &&
-            echo Binary file && return
-            run bat ${LF_BAT_OPTS:--pf --number} --paging=never "$f"
-        ;;
-        
-    esac
+FILE="${1}"
+WIDTH="${2:-$(tput cols)}"
+HEIGHT="${3:-$(tput lines)}"
+
+WIDTH="$(( WIDTH - 3 ))"
+HEIGHT="$(( HEIGHT - 3 ))"
+
+[ -L "${FILE}" ] && FILE="$(readlink "$FILE")"
+
+# Main procedure
+function main() {
+	# Display title and border
+	local filename="${FILE/$PWD\//}"
+	printf "\e[38;5;243m%*s\e[0m\n" $(( (${#filename} + WIDTH) / 2)) "$filename"
+	printf "\e[38;5;238m%${WIDTH}s\e[0m\n" | tr ' ' '-'
+
+	# Use the right tool for the extension
+	case "${FILE}" in
+		*.tar|*.tgz|*.xz) tar tvf "${FILE}"; return $?;;
+		*.deb) ar -tv "${FILE}"; return $?;;
+		*.zip) als -lqq "${FILE}" || unzip -l "${FILE}"; return $?;;
+		*.rar) unrar l -- "${FILE}"; return $?;;
+		*.7z|*.dmg|*.gz) 7z l -- "${FILE}" && return $?;;
+		*.bzip|*.bzip2|*.bp|*.bz2) als "${FILE}" && return $?;;
+
+		*.jpg|*.JPG|*.png|*.PNG) view_image || view_binary;;
+		*.ans|*.ANS) view_ansi && return $?;;
+		*.json) jq -C . "${FILE}" && return $?;;
+		*.md) glow -s dark -w "${WIDTH}" "${FILE}" && return $?;;
+		*.plist) plutil -p "${FILE}" && return $?;;
+		*.txt) view_sourcecode && return $?;;
+		*.xml) xmlstarlet fo -s 2 "${FILE}" | view_sourcecode - && return $?;;
+	esac
+
+	# Use the right tool for the mimetype label
+	case "$(file -b --mime-type "${FILE}")" in
+		image/*) view_image || view_binary;;
+		video/*|audio/*) view_multimedia || view_binary;;
+		application/pdf) view_pdf || view_binary;;
+		application/epub*) view_epub || view_binary;;
+		application/gzip|application-x-xz) tar tvf "${FILE}";;
+		application/x-sqlite*) view_sqlite || view_binary;;
+		application/x-terminfo|text/x-bytecode.python) view_binary;;
+		application/vnd.*-officedocument*|application/vnd.*.opendocument*)
+			view_opendocument || view_binary;;
+		application/octet-stream|application/x-*-binary|application/x-*executable)
+			view_binary;;
+
+		*) view_sourcecode;;
+	esac
+	return $?
 }
 
-run()
-{
-    [ "$1" = -p ] && pkg=$2 && shift 2
-    [ "$1" = -c ] && cmd=$2 && shift 2 || cmd=$1
-    [ -z "$pkg" ] && pkg=$cmd
-    if ! command -v $cmd >/dev/null; then
-        echo '[lfpreviewer]'
-        echo command "\"$cmd\"" is required for this preview.
-        echo install "\"$pkg\"".
-        exit 0
-    fi
-    "$@"
+# View binary hexyl/heksa/hexdump
+function view_binary() {
+	local len="$(( WIDTH * HEIGHT ))"
+
+	hexyl -n "$len" --border none "$FILE" || \
+		heksa -l "$len" "$FILE" || \
+		hexdump -n "$len" -C "$FILE"
+
+	return $?
 }
 
-# make a unique identifier of the given file based on file's
-# name, filesystem, type, size, and times of birth and modification.
-uid()
-{
-    stat -c '%n%i%F%s%W%Y' -- "$(readlink -f "$f")" | sha256sum | cut -d' ' -f1
+# View source-code with bat/pygmentize/highlight/cat
+function view_sourcecode() {
+	local input="${1:-$FILE}"
+
+	BAT_CONFIG_PATH='' bat "${input}" \
+			--theme=OneHalfDark --color=always --paging=never --tabs=2 --wrap=auto \
+			--style=plain --terminal-width "${WIDTH}" --line-range :"${HEIGHT}" || \
+		pygmentize -P tabsize=2 -O style=monokai -f console256 -g "${input}" || \
+		highlight -t 2 -s rdark -O xterm256 --force "${input}" || \
+		cat "${input}"
+
+	return $?
 }
 
-image()
-{
-    img="$1"
-    [ -n "$w" ] || [ -n "$h" ] || exit 1
-    
-    if [ -z "$DISPLAY" ] || [ ! -p "$FIFO" ]; then
-        run chafa -s ${w}x${h} "$img"
-        return
-    fi
-    
-    printf '%s%s%s\n' \
-    '{ "action": "add", "identifier": "lfpreview", "scaler": "contain",' \
-    '"path": "'"$img"'", "x": '$x', "y": '$y','  \
-    '"height": '$h', "width": '$((w-1))' }' > "$FIFO"
-    
-    exit 1
+# View images in terminal with chafa/timg/catimg/imgcat
+function view_image() {
+	local input="${1:-$FILE}"
+
+	viu -sb -w "$WIDTH" "$input" || \
+	catimg -r 2 -H "$HEIGHT" "$input" || \
+	chafa -s "$WIDTH"x"$HEIGHT" "$input" || \
+
+	local result=$?
+	if hash exiv2 2>/dev/null; then
+		echo
+		exiv2 -qu "$FILE"
+	fi
+
+	return $result
 }
 
-list_archive()
-{
-    cmd="$1"
-    list="$(run "$cmd" -l "$2")"
-    begin="$(printf '%s\n' "$list" | grep -boim1 ratio | cut -d: -f1)"
-    printf '%s\n' "$list" | cut -c$((begin+1))-
+# Viw multimedia metadata with mediainfo/id3ted/exiftool/id3info
+function view_multimedia() {
+	mediainfo "${FILE}" | sed 's/ *:/:/g' || \
+		id3ted -L "${FILE}" || \
+		exiftool "${FILE}" || \
+		id3info "${FILE}"
+
+	return $?
 }
 
-main "$@"
-exit 0
+# View Opendocument with pandoc/odt2txt
+function view_opendocument() {
+	if ! hash odt2txt 2>/dev/null; then
+		return 1
+	elif ! hash pandoc 2>/dev/null; then
+		odt2txt "${FILE}"
+	elif ! hash glow 2>/dev/null; then
+		pandoc "${FILE}" --to=markdown || odt2txt "${FILE}"
+	else
+		glow -s dark -w "${WIDTH}" \
+			<(pandoc "${FILE}" --to=markdown || odt2txt "${FILE}")
+	fi
+	return $?
+}
+
+# View PDF with pdftoppm or pdftotext
+function view_pdf() {
+	if hash pdftoppm 2>/dev/null; then
+		 pdftoppm -f 1 -l 1 -scale-to-x 1024 -scale-to-y -1 \
+				-singlefile -jpeg -tiffcompression jpeg -- "${FILE}" \
+			| view_image -
+		hash pdfinfo 2>/dev/null && pdfinfo "$FILE"
+	elif hash pdftotext 2>/dev/null; then
+		pdftotext -raw -l 10 -nopgbrk -q -- "${FILE}" -
+	fi
+	return $?
+}
+
+# Find and view cover image with tar and xmlstarlet
+function view_epub() {
+	if hash xmlstarlet 2>/dev/null; then
+		opf_path="$(tar xOf "$FILE" 'META-INF/container.xml' \
+			| xmlstarlet sel -t -v '/_:container/_:rootfiles/_:rootfile/@full-path')"
+
+		opf="$(tar xOf "$FILE" "$opf_path")"
+
+		cover_name="$(echo "$opf" | xmlstarlet \
+			sel -t -v '/_:package/_:metadata/_:meta[@name="cover"]/@content')"
+
+		echo "$opf" | xmlstarlet sel \
+				-t -v "/_:package/_:manifest/_:item[@id='$cover_name']/@href" \
+			| xargs -I'{}' tar xOf "$FILE" "$(dirname "$opf_path")/{}" \
+			| view_image -
+	else
+		{
+			tar xOf "$FILE" 'OEBPS/assets/cover.*' || \
+				tar xOf "$FILE" '*/cover.png' || \
+				tar xOf "$FILE" 'cover.png'
+		} | view_image -
+	fi
+
+	return $?
+}
+
+# List SQLite file tables and dump schema
+function view_sqlite() {
+	echo -e "# \e[1;37mTABLES\e[0m\n"
+	sqlite3 "$FILE" ".tables"
+	echo -e "\n# \e[1;37mSCHEMA\e[0m\n"
+	sqlite3 "$FILE" ".schema"
+	return $?
+}
+
+# View ANSI as PNG with ansilove
+function view_ansi() {
+	local tmpdir="${TMPDIR:-/tmp}"
+	local tmppng="$tmpdir/lf-preview-ansi-$$.png"
+
+	ansilove -o "$tmppng" "$FILE" 1>/dev/null && \
+		chafa -s "$WIDTH"x "$tmppng" && \
+		rm -f -- "$tmppng"
+
+	return $?
+}
+
+main
+
+# vim: set ts=2 sw=2 tw=80 noet :
