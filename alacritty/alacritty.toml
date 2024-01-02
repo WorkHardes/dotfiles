@@ -2,7 +2,7 @@ import = ["~/.config/alacritty/themes/themes/tokyo-night-storm.toml"]
 
 [window]
 decorations_theme_variant = "Dark"
-opacity = 0.8
+opacity = 0.9
 padding = { x = 3, y = 3 }
 
 [font]
