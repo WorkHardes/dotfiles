@@ -8,9 +8,8 @@
 }
 
 window#waybar {
-    background-color: #2f343f;
-    color: #a9c3e2;
-    border-bottom: 0px solid #3e424d;
+    background-color: transparent;
+    color: white;
 }
 
 #workspaces button {
@@ -19,7 +18,7 @@ window#waybar {
     border-right: 0px solid #2f343f;
     border-left: 0px solid #2f343f;
     color: #a9c3e2;
-    background: #2f343f;
+    background: transparent;
 }
 
 #workspaces button:hover {
@@ -58,3 +57,8 @@ window#waybar {
     border-radius: 6;
 }
 
+#custom-poweroff
+{
+    padding: 4 14px;
+    margin: 2 2px;
+}

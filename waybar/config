@@ -10,12 +10,14 @@
         "sway/window"
     ],
     "modules-right": [
+        "tray",
         "keyboard-state",
         "pulseaudio",
         "sway/language",
         "battery",
         "battery#bat2",
-        "clock"
+        "clock",
+        "custom/poweroff"
     ],
     "sway/workspaces": {
         "disable-scroll": false,
@@ -34,6 +36,10 @@
     },
     "sway/mode": {
         "format": "<span style=\"italic\">{}</span>"
+    },
+    "tray": {
+        "icon-size": 21,
+        "spacing": 10
     },
     "sway/scratchpad": {
         "format": "{icon} {count}",
@@ -99,5 +105,10 @@
         "timezone": "Europe/Moscow",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
         "format-alt": "{:%Y-%m-%d}"
+    },
+    "custom/poweroff": {
+        "tooltip": false,
+        "format": "",
+        "on-click": "bash $HOME/.config/waybar/poweroff.sh"
     }
 }
