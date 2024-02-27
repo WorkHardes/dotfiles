@@ -7,4 +7,4 @@ padding = { x = 3, y = 3 }
 
 [font]
 normal = { family = "Hack" }
-size = 12
+size = 14

@@ -157,7 +157,7 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 ## Locker
-bindsym $mod+Shift+Ctrl+l exec ~/.config/sway/lock.sh
+bindsym $mod+Shift+Ctrl+l exec $HOME/.config/sway/lock.sh
 
 ## Laptop keyboard bindings
 bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
@@ -172,14 +172,14 @@ bindsym XF86AudioPrev exec playerctl previous
 bindsym XF86Search exec $menu
 
 ## Application keybindings
-bindsym Ctrl+Alt+b exec brave-browser-nightly
-bindsym Ctrl+Alt+v exec code
-bindsym Ctrl+Alt+t exec telegram-desktop
-bindsym Ctrl+Alt+l exec alacritty -e lf
+bindsym $mod+Shift+b exec firefox
+bindsym $mod+Shift+v exec code
+bindsym $mod+Shift+t exec telegram-desktop
+bindsym $mod+Shift+f exec kitty -e lf
 
 ## Screenshots
-bindsym Print exec grim - | wl-copy
-bindsym $mod+Print exec grim -g "$(slurp)" - | wl-copy
+# bindsym Print exec grim - | wl-copy
+bindsym Print exec grim -g "$(slurp)" - | wl-copy
 # bindsym Print exec grim ~/Screenshots/screen-"$(date +%s)".png | wl-copy
 # bindsym $mod+Print exec grim -g "$(slurp)" ~/Screenshots/screen-"$(date +%s)".png | wl-copy
 
@@ -206,5 +206,10 @@ smart_gaps on
 default_border pixel
 for_window [tiling] border pixel 0
 smart_borders on
+
+# Autostart
+exec swaymsg "workspace 1; exec alacritty;"
+exec swaymsg "workspace 2; exec firefox;"
+exec swaymsg "workspace 3; exec code;"
 
 include /etc/sway/config.d/*
