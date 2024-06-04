@@ -8,7 +8,7 @@ set $up k
 set $right l
 
 # Terminal emulator
-set $term alacritty
+set $term kitty
 
 # Application launcher
 set $menu dmenu_path | wofi --show drun -I | xargs swaymsg exec --
@@ -208,7 +208,7 @@ for_window [tiling] border pixel 0
 smart_borders on
 
 # Autostart
-exec swaymsg "workspace 1; exec alacritty;"
+exec swaymsg "workspace 1; exec kitty;"
 exec swaymsg "workspace 2; exec firefox;"
 exec swaymsg "workspace 3; exec code;"
 

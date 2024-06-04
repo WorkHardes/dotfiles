@@ -12,6 +12,7 @@
 - [nvim](https://neovim.io/)
 - [oh-my-zsh](https://ohmyz.sh/)
 - [slock](https://tools.suckless.org/slock/)
+- [sublime-text](https://www.sublimetext.com/)
 - [sway](https://github.com/swaywm/sway)
 - [tmux](https://github.com/tmux/tmux)
 - [waybar](https://github.com/Alexays/Waybar)
