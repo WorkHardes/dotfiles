@@ -1,36 +1,71 @@
-window {
-    background-color: #2f343f;
+* {
+  outline: none;
+  border: none;
+  box-shadow: none;
+}
+
+#window {
+  background-color: rgba(--wofi-rgb-color0, 0.8);
+  border-radius: 6px;
 }
 
 #input {
-    margin: 10px;
-    border-radius: 0px;
-    border: none;
-    border-bottom: 3px solid #a9c3e2;
-    background-color: #2f343f;
-    color: white;
+  padding: 8px 6px;
+  margin: 16px;
+  padding-left: 14px;
+  color: #fff;
+  border-radius: 6px;
+}
+
+#input image {
+  margin-right: 12px;
 }
 
 #inner-box {
-    background-color: #2f343f;
-
+  margin: 4px;
+  padding: 8px;
+  padding-top: 0px;
+  color: --wofi-color7;
 }
 
 #outer-box {
-    margin: 20px;
-    padding:0px;
-    background-color: #2f343f;
+  border-radius: 6px;
 }
 
-#text {
-    padding: 5px;
-    color: white;
+#scroll {
+  margin-top: 4px;
+  border-radius: 6px;
+  margin-bottom: 4px;
+}
+
+#entry {
+  margin: 4px;
+  padding: 8px;
+  outline: none;
+  border-radius: 6px;
+}
+
+#entry image {
+  margin-left: 4px;
+}
+
+#entry:selected,
+#entry:selected list,
+#input {
+  background: linear-gradient(145deg, --wofi-color3 30%, --wofi-color4 100%);
 }
 
 #entry:selected {
-    background-color: #a9c3e2;
+  font-weight: bold;
 }
 
-#text:selected {
-    color: #2f343f;
+#entry:selected list {
+  font-weight: normal;
+  margin-top: 6px;
+  /* expanader probably has an odd width */
+  margin-left: 5px;
+}
+
+#text {
+  margin-left: 8px;
 }

@@ -1,8 +1,10 @@
-width=800
-height=400
-columns=2
-prompt=search
-term=alacritty
+width=30%
+height=50%
+location=center
+columns=1
+prompt=Search ...
+term=kitty
 no_actions=true
-hide_scroll=true
+insensitive=true
 sort_order=alphabetical
+gtk_dark=true
