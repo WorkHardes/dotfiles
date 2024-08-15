@@ -213,3 +213,6 @@ exec swaymsg "workspace 2; exec firefox;"
 exec swaymsg "workspace 3; exec code;"
 
 include /etc/sway/config.d/*
+
+exec lxpolkit
+exec mako
