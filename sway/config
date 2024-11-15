@@ -180,6 +180,7 @@ bindsym $mod+Shift+f exec kitty -e lf
 ## Screenshots
 # bindsym Print exec grim - | wl-copy
 bindsym Print exec grim -g "$(slurp)" - | wl-copy
+bindsym Ctrl+Shift+i exec swayshot
 # bindsym Print exec grim ~/Screenshots/screen-"$(date +%s)".png | wl-copy
 # bindsym $mod+Print exec grim -g "$(slurp)" ~/Screenshots/screen-"$(date +%s)".png | wl-copy
 
