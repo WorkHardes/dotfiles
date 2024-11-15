@@ -14,7 +14,7 @@ set $term kitty
 set $menu dmenu_path | wofi --show drun -I | xargs swaymsg exec --
 
 # Wallpaper
-output * bg /home/admin1/Repositories/arch-os-configs/wallpapers/Tanjiro.png fill
+output * bg $HOME/Repositories/arch-os-configs/wallpapers/Tanjiro.png fill
 
 # Output parameters
 output eDP-1 resolution 1920x1080
