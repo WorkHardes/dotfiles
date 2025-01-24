@@ -1,5 +1,4 @@
-[general]
-import = ["~/.config/alacritty/themes/themes/tokyo-night-storm.toml"]
+general.import = ["~/.config/alacritty/themes/themes/tokyo_night_storm.toml"]
 
 [window]
 decorations_theme_variant = "Dark"
@@ -7,5 +6,5 @@ opacity = 0.9
 padding = { x = 3, y = 3 }
 
 [font]
-normal = { family = "Hack", style = "Regular" }
-size = 16
+normal = { family = "Hack" }
+size = 18
