@@ -1,17 +1,20 @@
-#! /bin/bash
+#!/usr/bin/env bash
 
-case $(wofi -d -L 6 -l 3 -W 100 -x -120 -y 0 \
-    -D dynamic_lines=true << EOF | sed 's/^ *//'
-    Shutdown
-    Reboot
-    Logout
-    Cancel
-EOF
-) in
+display_menu() {
+    wofi_cmd="wofi -d -l 3 -W 100 -x -90 -y 0 -L 6"
+    echo -e "Shutdown\nReboot\nLogout\nCancel" | $wofi_cmd
+}
+
+choice=$(display_menu | sed 's/^ *//')
+
+case "$choice" in
     "Shutdown")
-        systemctl poweroff;;
+        systemctl poweroff
+    ;;
     "Reboot")
-        systemctl reboot;;
+        systemctl reboot
+    ;;
     "Logout")
-        swaymsg exit;;
+        swaymsg exit
+    ;;
 esac

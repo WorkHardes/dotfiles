@@ -1,4 +1,4 @@
-set previewer ~/.config/lf/preview
+set previewer ~/.config/lf/preview.sh
 set hidden true
 set icons true
 set scrolloff 4

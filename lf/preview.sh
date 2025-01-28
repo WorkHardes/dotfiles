@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-set -eu
+set -euxo pipefail
 
 [ -z "${1:-}" ] && echo "usage: $0 <image> [width] [height]" && exit 1
 
@@ -185,5 +185,3 @@ function view_ansi() {
 }
 
 main
-
-# vim: set ts=2 sw=2 tw=80 noet :
