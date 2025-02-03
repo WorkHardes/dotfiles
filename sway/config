@@ -207,5 +207,5 @@ exec swaymsg "workspace 6; exec thunderbird;"
 include /etc/sway/config.d/*
 
 exec lxpolkit
-exec mako
+exec swaync
 exec_always xdg-desktop-portal-wlr
