@@ -40,14 +40,8 @@ window#waybar {
     background-color: #eb4d4b;
 }
 
-#mode {
-    color: white;
-}
-
 #pulseaudio,
-#backlight,
 #language,
-#battery,
 #clock {
     background: #a9c3e2;
     color: #2f343f;
