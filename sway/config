@@ -14,17 +14,17 @@ set $term kitty
 set $menu dmenu_path | wofi --show drun -I | xargs swaymsg exec --
 
 # Wallpaper
-output * bg $HOME/Repositories/arch-os-configs/wallpapers/Tanjiro.png fill
+output * bg $HOME/.config/sway/wallpapers/Tanjiro.png fill
 
 # Output parameters
 output eDP-1 resolution 1920x1080
 
 #Idle
 exec swayidle -w \
-timeout 300 '~/.config/sway/lock.sh' \
+timeout 300 '$HOME/.config/sway/lock.sh' \
 timeout 600 'swaymsg "output * dpms off"' \
 resume 'swaymsg "output * dpms on"' \
-before-sleep '~/.config/sway/lock.sh'
+before-sleep '$HOME/.config/sway/lock.sh'
 
 #Input
 input "1739:52781:MSFT0004:00_06CB:CE2D_Touchpad" {
@@ -181,8 +181,8 @@ bindsym $mod+Shift+f exec kitty -e lf
 # bindsym Print exec grim - | wl-copy
 bindsym Print exec grim -g "$(slurp)" - | wl-copy
 bindsym Ctrl+Shift+i exec swayshot
-# bindsym Print exec grim ~/Screenshots/screen-"$(date +%s)".png | wl-copy
-# bindsym $mod+Print exec grim -g "$(slurp)" ~/Screenshots/screen-"$(date +%s)".png | wl-copy
+# bindsym Print exec grim $HOME/Screenshots/screen-"$(date +%s)".png | wl-copy
+# bindsym $mod+Print exec grim -g "$(slurp)" $HOME/Screenshots/screen-"$(date +%s)".png | wl-copy
 
 # Status Bar:
 bar {
