@@ -167,7 +167,8 @@ mode "resize" {
 }
 
 # Locker
-bindsym $mod+p exec $HOME/.config/sway/lock.sh
+bindsym $mod+p exec hyprlock -c $HOME/.config/hypr/hyprlock/hyprlock.conf
+# bindsym $mod+p exec $HOME/.config/sway/lock.sh
 
 # Laptop keyboard bindings
 bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
