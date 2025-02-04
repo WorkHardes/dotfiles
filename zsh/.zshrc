@@ -51,3 +51,6 @@ export DEFAULT_USER=$USER
 
 # golang binaries
 export PATH="$HOME/go/bin:$PATH"
+
+# xterm ssh for kitty
+[ "$TERM" = "xterm-kitty" ] && alias ssh="kitty +kitten ssh"
