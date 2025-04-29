@@ -23,7 +23,6 @@ plugins=(
     poetry
     postgres
     pre-commit
-    pyenv
     python
     rust
     ssh
@@ -40,11 +39,6 @@ plugins=(
 alias gpa="git pull --all"
 alias gb="git branch"
 alias ga="git add"
-
-# pyenv path
-export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init - zsh)"
 
 # prompt like ~
 export DEFAULT_USER=$USER

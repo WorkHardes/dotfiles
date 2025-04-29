@@ -45,3 +45,4 @@ video/x-flv=mpv.desktop
 video/x-msvideo=mpv.desktop
 video/3gpp=mpv.desktop
 video/3gpp2=mpv.desktop
+video/MP2T=mpv.desktop
