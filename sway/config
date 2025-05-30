@@ -188,7 +188,7 @@ bindsym XF86Search exec $menu
 bindsym $mod+Shift+b exec firefox
 bindsym $mod+Shift+v exec code
 bindsym $mod+Shift+t exec telegram-desktop
-bindsym $mod+Shift+f exec kitty -e lf
+bindsym $mod+Shift+f exec $term -e lf
 
 # Screenshots
 # bindsym Print exec grim - | wl-copy
@@ -197,15 +197,13 @@ bindsym Print exec grim -g "$(slurp)" - | wl-copy
 # bindsym $mod+Print exec grim -g "$(slurp)" $HOME/Screenshots/screen-"$(date +%s)".png | wl-copy
 
 # Autostart
-exec swaymsg "workspace 1; exec kitty;"
+exec swaymsg "workspace 1; exec $term;"
 exec swaymsg "workspace 2; exec firefox;"
 exec swaymsg "workspace 3; exec code;"
 exec swaymsg "workspace 4; exec telegram-desktop;"
-exec swaymsg "workspace 5; exec slack;"
-exec swaymsg "workspace 6; exec thunderbird;"
 
 include /etc/sway/config.d/*
 
-exec lxpolkit
-exec swaync
+exec_always lxpolkit
+exec_always swaync
 exec_always xdg-desktop-portal-wlr
