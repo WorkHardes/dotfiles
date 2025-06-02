@@ -17,7 +17,14 @@ set $menu wofi --show drun -I
 output * bg $HOME/.config/sway/wallpapers/Tanjiro.png fill
 
 # Output parameters
-output eDP-1 resolution 1920x1080
+output eDP-1 resolution 1920x1080@60Hz scale 1.75 pos -1920 1080
+output HDMI-A-1 resolution 1920x1080@60Hz scale 1 pos 0 0
+
+focus output HDMI-A-1
+
+set $laptop eDP-1
+bindswitch --reload --locked lid:on output $laptop disable
+bindswitch --reload --locked lid:off output $laptop enable
 
 # Status Bar
 bar {
@@ -38,10 +45,7 @@ smart_borders on
 
 #Idle
 exec swayidle -w \
-timeout 300 '$HOME/.config/sway/lock.sh' \
-timeout 600 'swaymsg "output * dpms off"' \
-resume 'swaymsg "output * dpms on"' \
-before-sleep '$HOME/.config/sway/lock.sh'
+timeout 300 '$HOME/.config/sway/lock.sh'
 
 # Input
 # swaymsg -t get_inputs
