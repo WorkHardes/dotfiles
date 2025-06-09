@@ -1,4 +1,16 @@
-# Mod key
+include /etc/sway/config.d/*
+
+# Autostart
+exec swaymsg "workspace 1; exec $term;"
+exec swaymsg "workspace 2; exec firefox;"
+exec swaymsg "workspace 3; exec code;"
+exec swaymsg "workspace 4; exec telegram-desktop;"
+
+exec_always lxpolkit
+exec_always swaync
+exec_always xdg-desktop-portal-wlr
+
+# Mod key - windows
 set $mod Mod4
 
 # Home row direction keys, like vim
@@ -17,14 +29,16 @@ set $menu wofi --show drun -I
 output * bg $HOME/.config/sway/wallpapers/Tanjiro.png fill
 
 # Output parameters
-output eDP-1 resolution 1920x1080@60Hz scale 1.75 pos -1920 1080
-output HDMI-A-1 resolution 1920x1080@60Hz scale 1 pos 0 0
+output eDP-1 resolution 1920x1080@60Hz scale 1 pos 0 0
+# output HDMI-A-1 resolution 1920x1080@60Hz scale 1 pos 0 0
 
-focus output HDMI-A-1
+# focus output HDMI-A-1
 
-set $laptop eDP-1
-bindswitch --reload --locked lid:on output $laptop disable
-bindswitch --reload --locked lid:off output $laptop enable
+# Laptop screen turn off when open/close
+# set $laptop eDP-1
+
+# bindswitch --reload --locked lid:on output $laptop disable
+# bindswitch --reload --locked lid:off output $laptop enable
 
 # Status Bar
 bar {
@@ -37,6 +51,14 @@ input * {
     xkb_options grp:alt_shift_toggle
 }
 
+# Laptop input
+# cmd to get Identifier: swaymsg -t get_inputs
+# input "Identifier" {
+#     dwt enabled
+#     natural_scroll enabled
+#     middle_emulation enabled
+# }
+
 # Windows
 smart_gaps on
 default_border pixel
@@ -47,13 +69,21 @@ smart_borders on
 exec swayidle -w \
 timeout 300 '$HOME/.config/sway/lock.sh'
 
-# Input
-# swaymsg -t get_inputs
-# input "Identifier" {
-#     dwt enabled
-#     natural_scroll enabled
-#     middle_emulation enabled
-#}
+# Floating mode
+floating_modifier $mod normal
+
+# Screenshots
+set $satty satty -f - --initial-tool=arrow --copy-command=wl-copy --actions-on-escape="save-to-clipboard,exit" --brush-smooth-history-size=5 --disable-notifications
+set $printscreen_mode 'printscreen (r:region, f:full, w:window)'
+mode $printscreen_mode {
+    bindsym r exec swaymsg 'mode "default"' && grim -t ppm -g "$(slurp -d)" - | $satty
+    bindsym f exec swaymsg 'mode "default"' && grim -t ppm - | $satty
+    bindsym w exec swaymsg 'mode "default"' && swaymsg -t get_tree | jq -r '.. | select(.focused?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"' | grim -t ppm -g - - | $satty
+    
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+Shift+p mode $printscreen_mode
 
 # Key bindings
 # Start a terminal
@@ -64,9 +94,6 @@ bindsym $mod+Shift+q kill
 
 # Start application launcher
 bindsym $mod+d exec $menu
-
-# Floating mode
-floating_modifier $mod normal
 
 # Reload the configuration file
 bindsym $mod+Shift+c reload
@@ -158,13 +185,13 @@ mode "resize" {
     bindsym $down resize grow height 10px
     bindsym $up resize shrink height 10px
     bindsym $right resize grow width 10px
-
+    
     # Ditto, with arrow keys
     bindsym Left resize shrink width 10px
     bindsym Down resize grow height 10px
     bindsym Up resize shrink height 10px
     bindsym Right resize grow width 10px
-
+    
     # Return to default mode
     bindsym Return mode "default"
     bindsym Escape mode "default"
@@ -172,7 +199,6 @@ mode "resize" {
 
 # Locker
 bindsym $mod+p exec hyprlock -c $HOME/.config/hypr/hyprlock/hyprlock.conf
-# bindsym $mod+p exec $HOME/.config/sway/lock.sh
 
 # Laptop keyboard bindings
 bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
@@ -193,21 +219,3 @@ bindsym $mod+Shift+b exec firefox
 bindsym $mod+Shift+v exec code
 bindsym $mod+Shift+t exec telegram-desktop
 bindsym $mod+Shift+f exec $term -e lf
-
-# Screenshots
-# bindsym Print exec grim - | wl-copy
-bindsym Print exec grim -g "$(slurp)" - | wl-copy
-# bindsym Print exec grim $HOME/Screenshots/screen-"$(date +%s)".png | wl-copy
-# bindsym $mod+Print exec grim -g "$(slurp)" $HOME/Screenshots/screen-"$(date +%s)".png | wl-copy
-
-# Autostart
-exec swaymsg "workspace 1; exec $term;"
-exec swaymsg "workspace 2; exec firefox;"
-exec swaymsg "workspace 3; exec code;"
-exec swaymsg "workspace 4; exec telegram-desktop;"
-
-include /etc/sway/config.d/*
-
-exec_always lxpolkit
-exec_always swaync
-exec_always xdg-desktop-portal-wlr
